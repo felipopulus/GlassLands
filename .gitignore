@@ -1,3 +1,9 @@
+# installer files is where the environment is installed
+installer_files
+text-generation-webui
+models/*
+TextGenerationAPI
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

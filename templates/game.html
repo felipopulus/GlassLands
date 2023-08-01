@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+<html>
+<head>
+    <title>A Town Game</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='gameStyle.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='char/player.css') }}">
+</head>
+<body>
+    <div id="landing-screen">
+        <form id="username-form">
+            <label for="username">Enter your username:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <label for="color">Choose your color:</label>
+            <input type="color" id="color" name="color">
+            <br>
+            <input type="submit" value="Start Game">
+        </form>
+    </div>
+    <div id="game-screen">
+        <div id="info-panel">
+            <button id="close-info-panel" style="position: absolute; top: 0; right: 0;">X</button>
+            <h2 id="player-name"></h2>
+            <p id="player-info"></p>
+        </div>
+        <div id="game-board">
+            <div id="tiles"></div>
+            <div id="players"></div>
+        </div>
+    </div>
+    <!-- <script src="{{ url_for('static', filename='player.js') }}" defer></script> -->
+    <script type="module" src="{{ url_for('static', filename='main.js') }}" defer></script>
+</body>
+</html>

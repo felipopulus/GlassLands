@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.3/purify.min.js"></script>
+    <script>
+        var BASE_URL = "http://192.168.107.230:5000";
+
+        // Function to send a POST request to the server
+        function sendAction(cellNumber, text) {
+            // Create a new action
+            var action = {
+                type: "click",
+                cell: cellNumber,
+                text: DOMPurify.sanitize(text)
+            };
+    
+            fetch(`${BASE_URL}/game`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(action)
+            })
+            .then(response => {
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder("utf-8");
+                return reader.read().then(function processText({ done, value }) {
+                    if (done) {
+                        console.log("Stream complete");
+                        return;
+                    }
+    
+                    // Get the received data
+                    var data = decoder.decode(value);
+    
+                    // Log the chunk of data
+                    console.log("Received chunk of data: ", data);
+    
+                    // Get the paragraph element
+                    var responseParagraph = document.querySelector(`#response${cellNumber}`);
+                    
+                    var token = data
+                    // var formattedToken = token.replace(/\n/g, "<br>"); // Replace line breaks
+
+                    // Append the received data to the paragraph text
+                    responseParagraph.innerHTML += token; // Skip "data: "
+    
+                    // Continue to read from the stream
+                    return reader.read().then(processText);
+                });
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="grid"></div>
+    <script>
+        var grid = document.getElementById("grid");
+
+        for (let i = 0; i < 24; i++) {
+            var cell = document.createElement("div");
+            cell.className = "cell";
+            cell.id = "cell" + (i + 1);
+
+            var inputField = document.createElement("input");
+            inputField.type = "text";
+            inputField.placeholder = "Enter text";
+
+            var button = document.createElement("button");
+            button.id = "button" + (i + 1);
+            button.textContent = "Cell " + (i + 1);
+            button.addEventListener("click", function() {
+                var inputField = this.parentNode.querySelector('input');
+                var responseParagraph = this.parentNode.querySelector('p');
+                responseParagraph.innerHTML = ""; // Clear the response paragraph
+                sendAction(i + 1, inputField.value);
+            });
+
+            inputField.addEventListener("keyup", function(event) {
+                // Number 13 is the "Enter" key on the keyboard
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    // Get the button associated with this input field and click it
+                    var buttonId = "button" + this.parentNode.id.slice(4);  // The slice is to remove the "cell" prefix
+                    document.getElementById(buttonId).click();
+                }
+            });
+
+            var responseParagraph = document.createElement("p");
+            responseParagraph.id = "response" + (i + 1);
+
+            cell.appendChild(inputField);
+            cell.appendChild(button);
+            cell.appendChild(responseParagraph);
+            grid.appendChild(cell);
+        }
+
+        function updateButtonNames() {
+            fetch(`${BASE_URL}/character_names`)
+                .then(response => response.json())
+                .then(names => {
+                    names.forEach((name, index) => {
+                        const button = document.querySelector(`#button${index + 1}`);
+                        button.textContent = name;
+                    });
+                });
+            }
+        // Call the function when the page loads
+        window.onload = updateButtonNames;
+    </script>
+</body>
+</html>

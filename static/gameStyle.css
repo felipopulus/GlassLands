@@ -1,0 +1,132 @@
+/* styles.css */
+
+body, html {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* --------- Landing Screen -------- */
+#landing-screen {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);  /* Semi-transparent black */
+}
+
+#username-form {
+    position: relative; /* This makes the form a positioned ancestor for the submit button */
+    padding: 20px;
+    background: white;
+}
+
+#username-form label, 
+#username-form input {
+    display: block;
+    padding: 5px; /* Adjust as needed */
+}
+
+#username-form input[type="submit"] {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+/* --------- Game Screen -------- */
+#game-screen {
+    display: grid;
+    grid-template-columns: auto 1fr;  /* Adjust the size of the columns here */
+    width: 100%;
+    height: 100%;
+}
+
+#game-board {
+    z-index: 0;
+    position: relative; 
+    /* width: calc(100vw - 40px); */
+    /* width: 100%; */
+    /* height: calc(100vh - 40px); */
+    /* margin: 20px auto; */
+    /* width: calc(100vw);
+    height: calc(100vh); */
+    /* padding: 0px; */
+    border: 20px solid #5b667a;  /* Add a 20px black border */
+}
+
+#tiles {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 0px;
+}
+
+.tile {
+    position: relative;  /* Make the tile a positioned ancestor for the title */
+    border: 1px solid #000;
+    background: #bbbbbb;
+    width: 100%;
+    height: 100%;
+}
+
+.tile.selected {
+    background: rgb(189, 189, 245);
+}
+
+.tile-title {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);  /* Center the title horizontally */
+    text-align: center;
+}
+
+/* --------- Info Panel -------- */
+#info-panel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: #b3b3b3;  /* Adjust as needed */
+    box-sizing: border-box;  /* Include padding (and border, if any) within the element's total width/height */
+}
+
+#close-info-panel {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+/* --------- Contex Menu -------- */
+.context-menu {
+    display: none;
+    position: relative;
+    background-color: #c2c2c2;
+    border: 1px solid #1f1f1f;
+    width: 200px;
+}
+
+.context-menu.show {
+    display: block;
+}
+
+.context-menu-option {
+    padding: 3px;
+    cursor: pointer;
+    border: 1px solid #1f1f1f;
+}
